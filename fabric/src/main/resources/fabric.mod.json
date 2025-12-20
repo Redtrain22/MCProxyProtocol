@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "mcproxyprotocol",
+  "version": "${version}",
+  "name": "MCProxyProtocol",
+  "description": "A mod to handle TCP PROXY Protocol header.\nThis is a mod designed for use on a Dedicated Server. This is NOT designed for a client.",
+  "authors": ["Redtrain22"],
+  "contact": {
+    "homepage": "https://github.com/Redtrain22/MCProxyProtocol",
+    "sources": "https://github.com/Redtrain22/MCProxyProtocol"
+  },
+  "license": "MIT",
+  "icon": "assets/mcproxyprotocol/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["me.redtrain.fabric.MCProxyProtocolFabric"],
+    "client": [],
+    "server": []
+  },
+  "mixins": ["mcproxyprotocol.mixins.json"],
+  "depends": {
+    "fabricloader": ">=0.18.3",
+    "minecraft": "~1.21.1",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}

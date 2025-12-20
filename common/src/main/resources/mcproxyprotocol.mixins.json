@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "me.redtrain.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": ["ServerConnectionListenerMixin"],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}

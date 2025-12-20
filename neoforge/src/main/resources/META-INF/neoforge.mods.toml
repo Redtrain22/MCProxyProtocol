@@ -1,0 +1,33 @@
+modLoader = "javafml"
+loaderVersion = "[4,)"
+issueTrackerURL = "https://github.com/Redtrain22/MCProxyProtocol/issues"
+license = "MIT"
+
+[[mods]]
+modId = "mcproxyprotocol"
+version = "${version}"
+displayName = "MCProxyProtocol"
+authors = "Redtrain22"
+description = '''
+A mod to handle TCP PROXY Protocol header.
+
+This is a mod designed for use on a Dedicated Server. This is NOT designed for a client.
+'''
+#logoFile = ""
+
+[[dependencies.mcproxyprotocol]]
+modId = "neoforge"
+type = "required"
+versionRange = "[21.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.mcproxyprotocol]]
+modId = "minecraft"
+type = "required"
+versionRange = "[1.21.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[mixins]]
+config = "mcproxyprotocol.mixins.json"
