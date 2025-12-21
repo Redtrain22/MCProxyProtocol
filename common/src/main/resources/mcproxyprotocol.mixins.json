@@ -1,6 +1,6 @@
 {
   "required": true,
-  "package": "me.redtrain.mixin",
+  "package": "me.redtrain.mixins",
   "compatibilityLevel": "JAVA_21",
   "mixins": ["ServerConnectionListenerMixin"],
   "injectors": {
