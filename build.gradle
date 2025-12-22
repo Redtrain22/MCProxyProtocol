@@ -36,7 +36,12 @@ subprojects {
     }
 
     dependencies {
-        compileOnly "com.electronwill.night-config:toml:${rootProject.night_config_version}"
+        compileOnly("com.electronwill.night-config:toml:${rootProject.night_config_version}")
+
+        implementation("com.github.seancfoley:ipaddress:${rootProject.ipaddress_version}")
+
+        implementation("io.netty:netty-codec-haproxy:${rootProject.haproxy_version}")
+
         minecraft "net.minecraft:minecraft:$rootProject.minecraft_version"
         mappings loom.officialMojangMappings()
     }

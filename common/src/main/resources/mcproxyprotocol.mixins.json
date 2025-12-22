@@ -2,7 +2,11 @@
   "required": true,
   "package": "me.redtrain.mixins",
   "compatibilityLevel": "JAVA_21",
-  "mixins": ["ServerConnectionListenerMixin"],
+  "mixins": [
+    "ServerConnectionListenerMixin",
+    "ChannelInitializerMixin",
+    "ConnectionMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   },

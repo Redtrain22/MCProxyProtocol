@@ -1,6 +1,7 @@
 package me.redtrain.fabric;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.loader.api.FabricLoader;
 
 import org.slf4j.Logger;
 
@@ -16,6 +17,8 @@ public class MCProxyProtocolFabric implements ModInitializer {
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 		LOGGER.info("Hello Fabric world!");
+
+		MCProxyProtocol.init(String.format("%s/%s.toml", FabricLoader.getInstance().getConfigDir(), MOD_ID));
 
 	}
 }
