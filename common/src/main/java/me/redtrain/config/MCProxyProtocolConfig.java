@@ -1,5 +1,6 @@
 package me.redtrain.config;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import com.electronwill.nightconfig.core.CommentedConfig;
@@ -54,19 +55,28 @@ public class MCProxyProtocolConfig {
     spec.define("bypassAddresses", defaultConfig.bypassAddresses);
   }
 
-  public MCProxyProtocolConfig(String configFile) {
+  private void createDefaultConfig(CommentedFileConfig config) {
+    MCProxyProtocol.LOGGER.info("Detected empty config file, creating one with the defaults");
+
+    config.addAll(ObjectSerializer.standard().serializeFields(new ConfigData(), CommentedConfig::inMemory));
+    config.save();
+  }
+
+  public MCProxyProtocolConfig(File configFile) {
     createSpec();
 
     CommentedFileConfig config = CommentedFileConfig.of(configFile);
 
+    if ((!configFile.exists()))
+      createDefaultConfig(config);
+
     config.load();
 
-    if (config.isEmpty()) {
-      MCProxyProtocol.LOGGER.info("Detected empty config file, creating one with the defaults");
-
-      config.addAll(ObjectSerializer.standard().serializeFields(new ConfigData(), CommentedConfig::inMemory));
-      config.save();
-    }
+    // Cannot be above config.load().
+    // This must fire for config.isEmpty() potentially be true
+    // otherwise it's always false
+    if (config.isEmpty())
+      createDefaultConfig(config);
 
     if (!spec.isCorrect(config)) {
       CorrectionListener listener = (action, path, incorrectValue, correctValue) -> {

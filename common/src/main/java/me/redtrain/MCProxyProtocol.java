@@ -1,5 +1,7 @@
 package me.redtrain;
 
+import java.io.File;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,7 +12,7 @@ public class MCProxyProtocol {
   public static final Logger LOGGER = LoggerFactory.getLogger(MCProxyProtocol.MOD_ID);
   public static MCProxyProtocolConfig config;
 
-  public static void init(String configFile) {
+  public static void init(File configFile) {
     config = new MCProxyProtocolConfig(configFile);
   }
 }
