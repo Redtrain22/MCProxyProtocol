@@ -1,0 +1,87 @@
+name: mcproxyprotocol
+
+services:
+  mcproxyprotocol-nginx:
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    image: docker.io/library/nginx:latest
+    networks:
+      - nginx
+      - fabric
+      - neoforge
+    ports:
+      - protocol: tcp
+        published: 25545
+        target: 25545
+        name: minecraft-fabric
+      - protocol: tcp
+        published: 25555
+        target: 25555
+        name: minecraft-neoforge
+  mcproxyprotocol-fabric:
+    volumes:
+      - fabric:/data
+      - ./fabric/build/libs/mcproxyprotocol-fabric-1.0.0.jar:/data/mods/mcproxyprotocol-fabric-1.0.0.jar:ro
+    image: ghcr.io/itzg/minecraft-server:2025.12.0-java21-alpine
+    networks:
+      - fabric
+    tty: true
+    stdin_open: true
+    environment:
+      TYPE: "FABRIC"
+      VERSION: "1.21.1"
+      FABRIC_LOADER_VERSION: "0.18.3"
+      EULA: "true"
+      MEMORY: 2G
+      MODRINTH_PROJECTS: |
+        fabric-api
+      USE_AIKAR_FLATGS: "false"
+      USE_MEOWICE_FLAGS: "true"
+      SNOOPER_ENABLED: "false"
+      SPAWN_PROTECTION: "0"
+      ALLOW_FLIGHT: "true"
+      RCON_CMDS_STARTUP: |
+        gamerule mobGriefing false
+        gamerule playersSleepingPercentage 1
+      OPS: |
+        Redtrain22
+  mcproxyprotocol-neoforge:
+    volumes:
+      - neoforge:/data
+      - ./neoforge/build/libs/mcproxyprotocol-neoforge-1.0.0.jar:/data/mods/mcproxyprotocol-neoforge-1.0.0.jar:ro
+    image: ghcr.io/itzg/minecraft-server:2025.12.0-java21-alpine
+    networks:
+      - neoforge
+    tty: true
+    stdin_open: true
+    environment:
+      TYPE: "NEOFORGE"
+      VERSION: "1.21.1"
+      NEOFORGE_VERSION: "21.1.216"
+      EULA: "true"
+      MEMORY: 2G
+      USE_AIKAR_FLATGS: "false"
+      USE_MEOWICE_FLAGS: "true"
+      SNOOPER_ENABLED: "false"
+      SPAWN_PROTECTION: "0"
+      ALLOW_FLIGHT: "true"
+      RCON_CMDS_STARTUP: |
+        gamerule mobGriefing false
+        gamerule playersSleepingPercentage 1
+      OPS: |
+        Redtrain22
+
+networks:
+  default:
+  nginx:
+    name: mcproxyprotocol-nginx
+  fabric:
+    name: mcproxyprotocol-fabric
+  neoforge:
+    name: mcproxyprotocol-neoforge
+
+volumes:
+  fabric:
+    name: mcproxyprotocol-fabric
+  neoforge:
+    name: mcproxyprotocol-neoforge

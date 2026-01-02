@@ -35,6 +35,8 @@ public class MCProxyProtocolHandler extends ChannelInboundHandlerAdapter {
       return;
     }
 
+    MCProxyProtocol.LOGGER.debug("Socket Address after PROXY Header handling: " + realAddress.toString());
+
     final InetSocketAddress clientAddress = new InetSocketAddress(realAddress, realPort);
     final Connection conn = (Connection) context.pipeline().get("packet_handler");
 

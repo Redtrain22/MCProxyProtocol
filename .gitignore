@@ -28,6 +28,9 @@ bin/
 
 *.DS_Store
 
+# .architectory
+.architectury-transformer/
+
 # fabric
 
 run/

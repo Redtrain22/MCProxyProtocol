@@ -35,7 +35,7 @@ dependencies {
 
     shadowBundle "com.electronwill.night-config:toml:${rootProject.night_config_version}"
     shadowBundle "com.github.seancfoley:ipaddress:${rootProject.ipaddress_version}"
-    shadowBundle "io.netty:netty-codec-haproxy:${rootProject.haproxy_version}"
+    include "io.netty:netty-codec-haproxy:${rootProject.haproxy_version}"
 }
 
 processResources {

@@ -1,5 +1,6 @@
 package me.redtrain.mixins;
 
+import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
 
 import org.spongepowered.asm.mixin.Mixin;
@@ -20,24 +21,34 @@ import net.minecraft.server.network.ServerConnectionListener;
 abstract class ServerConnectionListenerMixin {
 
   @Redirect(method = "startTcpServerListener", at = @At(value = "INVOKE", target = "Lio/netty/bootstrap/ServerBootstrap;childHandler(Lio/netty/channel/ChannelHandler;)Lio/netty/bootstrap/ServerBootstrap;"), remap = false)
-  private ServerBootstrap MCProxyProtocol_logOnStartTCPServerListener(ServerBootstrap bootstrap,
+  private ServerBootstrap MCProxyProtocol_hookStartTCPServerListenerServerBootstrap(ServerBootstrap bootstrap,
       ChannelHandler childHandler) {
 
     return bootstrap.childHandler(new ChannelInitializer<Channel>() {
       @Override
       protected void initChannel(Channel channel) throws Exception {
-        final ChannelInitializerMixin initializer = ((ChannelInitializerMixin) childHandler);
-        initializer.MCProxyProtocol_invokeInitChannel(channel);
+        if (!(childHandler instanceof MCProxyProtocol.IChannelInitializer)) {
+          Method method = childHandler.getClass().getDeclaredMethod("initChannel", Channel.class);
+          method.setAccessible(true);
 
+          method.invoke(childHandler, channel);
+        }
+
+        MCProxyProtocol.LOGGER.debug("Proxy Protocol Enabled: " + MCProxyProtocol.config.config.enabled);
         if (!MCProxyProtocol.config.config.enabled)
           return;
 
         final InetSocketAddress socketAddress = (InetSocketAddress) channel.remoteAddress();
         final IPAddressString remoteAddress = new IPAddressString(socketAddress.getHostString());
 
+        MCProxyProtocol.LOGGER.debug("Socket Address before PROXY Header handling: " + socketAddress.getHostString());
+
         // All trusted CIDRs will have the ProxyProtocol Handler set
         for (String trustedCIDR : MCProxyProtocol.config.config.trustedAddresses) {
           if (new IPAddressString(trustedCIDR).contains(remoteAddress)) {
+            MCProxyProtocol.LOGGER
+                .debug("Is Trusted Address: " + new IPAddressString(trustedCIDR).contains(remoteAddress));
+
             channel.pipeline()
                 .addAfter("timeout", "haproxy-decoder", new HAProxyMessageDecoder())
                 .addAfter("haproxy-decoder", "haproxy-handler", new MCProxyProtocolHandler());

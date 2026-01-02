@@ -39,7 +39,10 @@ dependencies {
 
     shadowBundle "com.electronwill.night-config:toml:${rootProject.night_config_version}"
     shadowBundle "com.github.seancfoley:ipaddress:${rootProject.ipaddress_version}"
-    // shadowBundle "io.netty:netty-codec-haproxy:${rootProject.haproxy_version}"
+    shadowBundle("io.netty:netty-codec-haproxy:${rootProject.haproxy_version}") {
+        // This fixes Java Module loading that doesn't happen on Fabric-based servers
+        exclude group: '*', module: '*'
+    }
 }
 
 processResources {
@@ -56,7 +59,6 @@ shadowJar {
 
     relocate 'com.electronwill.night', "${rootProject.group}.libs.com.electronwill.night"
     relocate 'inet.ipaddr', "${rootProject.group}.libs.inet.ipaddr"
-
 }
 
 remapJar {
